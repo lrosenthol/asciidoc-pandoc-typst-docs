@@ -29,7 +29,7 @@ make fonts
 make DOC=numbered-report pdf
 ```
 
-The default build entrypoint is `manuscript/white-paper.adoc`. Override it with `DOC=...` if you add more documents.
+By default, `make pdf` and `make typst` build every top-level document entrypoint under `manuscript/*.adoc`. Use `DOC=...` to build just one.
 
 Current sample entrypoints:
 
@@ -38,11 +38,12 @@ Current sample entrypoints:
 
 ## Targets
 
-- `make pdf`: build `build/white-paper.pdf`
-- `make typst`: build the intermediate Typst source
-- `make native`: inspect Pandoc's AST for troubleshooting conversion behavior
+- `make pdf`: build PDFs for all manuscript entrypoints
+- `make typst`: build Typst source for all manuscript entrypoints
+- `make native`: inspect Pandoc's AST for all manuscript entrypoints
 - `make fonts`: confirm that Typst sees the bundled project fonts
 - `make DOC=numbered-report pdf`: build the numbered validation document
+- `make DOC=white-paper pdf`: build only the white paper
 - `make DOC=annual-report pdf`: build a different manuscript entrypoint
 - `make PDF_STANDARD=ua-1 pdf`: request PDF/UA-1 output
 - `make PDF_STANDARD=a-2u pdf`: request PDF/A-2u output
