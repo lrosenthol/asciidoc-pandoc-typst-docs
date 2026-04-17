@@ -77,6 +77,20 @@ local function block_identifier(el)
   return nil
 end
 
+local function title_case(value)
+  if not value or value == "" then
+    return nil
+  end
+
+  local parts = {}
+  for part in string.gmatch(value, "[^%-%_]+") do
+    local lower = string.lower(part)
+    table.insert(parts, string.upper(string.sub(lower, 1, 1)) .. string.sub(lower, 2))
+  end
+
+  return table.concat(parts, " ")
+end
+
 local function configure_from_meta(meta)
   document_dir = meta.docdir and pandoc.utils.stringify(meta.docdir) or ""
   images_dir = meta.imagesdir and pandoc.utils.stringify(meta.imagesdir) or ""
@@ -215,6 +229,23 @@ local function transform_div(el)
   })
 end
 
+local function transform_codeblock(el)
+  local rendered = render_blocks({ el })
+  local language = el.classes and el.classes[1] or nil
+  local caption = title_case(language)
+
+  if caption then
+    caption = caption .. " Example"
+  else
+    caption = "Code Example"
+  end
+
+  return pandoc.RawBlock(
+    "typst",
+    string.format("#exampleblock([%s])[\n%s\n]", caption, rendered)
+  )
+end
+
 function Pandoc(doc)
   configure_from_meta(doc.meta)
 
@@ -225,5 +256,6 @@ function Pandoc(doc)
   return doc:walk({
     Figure = transform_figure,
     Div = transform_div,
+    CodeBlock = transform_codeblock,
   })
 end

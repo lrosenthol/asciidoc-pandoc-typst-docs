@@ -4,9 +4,11 @@
 #show heading.where(level: 1): set text(fill: rgb("#0f2d52"))
 #show heading.where(level: 2): set text(fill: rgb("#163d6b"))
 
+#show figure.where(kind: table): set figure.caption(position: bottom)
 #show figure.where(kind: table): set block(below: 1.1em)
 #show figure.where(kind: image): set block(below: 1.1em)
-#show figure.where(kind: "example"): set figure.caption(position: top)
+#show figure.where(kind: "example"): set figure.caption(position: bottom)
+#show figure.where(kind: "example"): set block(below: 1.1em)
 #show table.header: set align(center)
 #show table.header: set text(weight: "semibold")
 
@@ -21,14 +23,17 @@
 
 #let exampleblock(caption, body) = {
   figure(
-    block(
-      inset: 10pt,
-      stroke: 1pt + luma(195),
-      radius: 4pt,
-      fill: luma(250),
-      breakable: true,
-    )[
-      #body
+    align(center)[
+      #block(
+        width: 92%,
+        inset: 10pt,
+        stroke: 1pt + luma(195),
+        radius: 4pt,
+        fill: luma(250),
+        breakable: true,
+      )[
+        #body
+      ]
     ],
     kind: "example",
     supplement: [Example],
