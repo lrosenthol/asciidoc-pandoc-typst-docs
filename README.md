@@ -2,14 +2,22 @@
 
 This project is structured for producing white papers, reports, and similar long-form documents from AsciiDoc through Pandoc to Typst PDF output. The entire toolchain runs in Docker via the official `pandoc/typst` image.
 
+It currently includes:
+
+- a white-paper style document entrypoint
+- a numbered validation report with mixed heading levels
+- bundled Source Sans 3 and Source Code Pro fonts
+- custom handling for admonitions, image figures, examples, and section numbering
+- optional PDF/UA-1 and PDF/A-2u output controls through `make`
+
 ## Layout
 
 - `manuscript/`: document entrypoints and section files
 - `manuscript/sections/`: reusable included sections for long-form reports
-- `styles/filters/`: Pandoc Lua filters
+- `styles/filters/`: Pandoc Lua filters that normalize AsciiDoc structures for Typst
 - `styles/typst/`: Typst presentation and document styling
 - `assets/fonts/`: bundled Adobe font files used during Docker builds
-- `assets/images/`: project-local image assets
+- `assets/images/`: project-local image assets used by the sample documents
 - `build/`: generated Typst and PDF output
 
 ## Quick Start
@@ -22,6 +30,11 @@ make DOC=numbered-report pdf
 ```
 
 The default build entrypoint is `manuscript/white-paper.adoc`. Override it with `DOC=...` if you add more documents.
+
+Current sample entrypoints:
+
+- `manuscript/white-paper.adoc`
+- `manuscript/numbered-report.adoc`
 
 ## Targets
 
@@ -45,9 +58,25 @@ The build is configured to use:
 
 Those font files are vendored into the repository so the Docker build does not rely on host-installed fonts.
 
-## Admonitions
+## What The Filter Does
 
-Pandoc preserves AsciiDoc admonitions semantically, but Typst does not style them automatically when emitted by Pandoc. The Lua filter in `styles/filters/admonitions-to-typst.lua` rewrites admonition blocks into Typst macro calls, and `styles/typst/document.typ` renders them as styled callouts.
+The shared Lua filter in `styles/filters/asciidoc-to-typst.lua` is doing more than admonition handling now. It currently:
+
+- rewrites AsciiDoc admonitions into Typst callout macros
+- maps `:sectnums:` and `:sectnumlevels:` into Typst heading numbering rules
+- rewrites simple image figures into explicit Typst figure calls
+- preserves image alt text for accessibility-aware output
+- rewrites AsciiDoc example blocks into a separate numbered `Example` figure kind
+
+The matching visual presentation lives in `styles/typst/document.typ`.
+
+## Figures And Examples
+
+The project now includes sample SVG figures in `assets/images/` and exercises them in both documents.
+
+- White paper figures are emitted as numbered image figures with captions and alt text.
+- The numbered report includes multiple figures, multiple code blocks, and multiple numbered examples.
+- Example blocks are counted separately from image figures.
 
 ## Section Numbering
 
@@ -69,4 +98,5 @@ Typst currently does not let you target PDF/A and PDF/UA at the same time. Sourc
 
 - The project currently pins `pandoc/typst:3.9-ubuntu`.
 - If your documents live in a cloud-synced folder on macOS and Docker has trouble with the mounted path, override `HOST_WORKDIR` when running `make`.
-- The current starter is a white-paper/report-oriented baseline. The next production upgrades would usually be bibliography handling, title-page variants, cover imagery, and brand-specific theme variables.
+- The theme currently uses restrained admonitions, centered column headers, start-aligned body cells, and separate figure/example numbering.
+- The next production upgrades would usually be bibliography handling, title-page variants, cover imagery, richer cross-references, and brand-specific theme variables.

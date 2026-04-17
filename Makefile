@@ -35,7 +35,7 @@ COMMON_PANDOC_FLAGS = \
 	--standalone \
 	--metadata-file=$(PANDOC_METADATA) \
 	--resource-path=.:$(MANUSCRIPT_DIR):$(MANUSCRIPT_DIR)/sections:assets \
-	--lua-filter=styles/filters/admonitions-to-typst.lua \
+	--lua-filter=styles/filters/asciidoc-to-typst.lua \
 	--include-in-header=styles/typst/document.typ \
 	--pdf-engine-opt=--font-path=$(SOURCE_SANS_DIR) \
 	--pdf-engine-opt=--font-path=$(SOURCE_CODE_DIR) \
@@ -70,12 +70,12 @@ $(BUILD_DIR):
 
 typst: FORCE $(TYPST_OUT)
 
-$(TYPST_OUT): FORCE $(SOURCE) $(PANDOC_METADATA) styles/filters/admonitions-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
+$(TYPST_OUT): FORCE $(SOURCE) $(PANDOC_METADATA) styles/filters/asciidoc-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
 	$(PANDOC) $(COMMON_PANDOC_FLAGS) --to=typst $(SOURCE) -o $(TYPST_OUT)
 
 pdf: FORCE $(PDF_OUT)
 
-$(PDF_OUT): FORCE $(SOURCE) $(PANDOC_METADATA) styles/filters/admonitions-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
+$(PDF_OUT): FORCE $(SOURCE) $(PANDOC_METADATA) styles/filters/asciidoc-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
 	$(PANDOC) $(COMMON_PANDOC_FLAGS) --pdf-engine=typst $(SOURCE) -o $(PDF_OUT)
 
 native: FORCE $(NATIVE_OUT)
