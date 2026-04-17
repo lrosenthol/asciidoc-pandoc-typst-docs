@@ -23,9 +23,11 @@
 
 #let exampleblock(caption, body) = {
   figure(
-    align(center)[
-      #block(
-        width: 92%,
+    grid(
+      columns: (1fr, 92%, 1fr),
+      [],
+      block(
+        width: 100%,
         inset: 10pt,
         stroke: 1pt + luma(195),
         radius: 4pt,
@@ -33,8 +35,38 @@
         breakable: true,
       )[
         #body
-      ]
-    ],
+      ],
+      [],
+    ),
+    kind: "example",
+    supplement: [Example],
+    caption: caption,
+  )
+}
+
+#let codeexample(caption, language, source) = {
+  let rendered = if language == none {
+    raw(source, block: true)
+  } else {
+    raw(source, lang: language, block: true)
+  }
+
+  figure(
+    grid(
+      columns: (1fr, 92%, 1fr),
+      [],
+      block(
+        width: 100%,
+        inset: 10pt,
+        stroke: 1pt + luma(195),
+        radius: 4pt,
+        fill: luma(250),
+        breakable: true,
+      )[
+        #rendered
+      ],
+      [],
+    ),
     kind: "example",
     supplement: [Example],
     caption: caption,

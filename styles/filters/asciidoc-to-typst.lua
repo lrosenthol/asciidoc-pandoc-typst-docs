@@ -91,6 +91,24 @@ local function title_case(value)
   return table.concat(parts, " ")
 end
 
+local function codeexample_block(caption, el, identifier)
+  local language = el.classes and el.classes[1] or nil
+  local caption_markup = caption and string.format("[%s]", caption) or "none"
+  local language_markup = language and string.format("%q", language) or "none"
+  local raw = string.format(
+    "#codeexample(%s, %s, %q)",
+    caption_markup,
+    language_markup,
+    el.text
+  )
+
+  if identifier then
+    raw = raw .. string.format(" <%s>", identifier)
+  end
+
+  return pandoc.RawBlock("typst", raw)
+end
+
 local function configure_from_meta(meta)
   document_dir = meta.docdir and pandoc.utils.stringify(meta.docdir) or ""
   images_dir = meta.imagesdir and pandoc.utils.stringify(meta.imagesdir) or ""
@@ -164,6 +182,15 @@ local function transform_figure(el)
 end
 
 local function transform_div(el)
+  if #el.content == 2 then
+    local first = el.content[1]
+    local second = el.content[2]
+
+    if first.t == "Div" and has_class(first.classes, "title") and second.t == "CodeBlock" then
+      return codeexample_block(pandoc.utils.stringify(first), second, block_identifier(el))
+    end
+  end
+
   local kind = nil
 
   for _, class in ipairs(el.classes) do
@@ -230,7 +257,6 @@ local function transform_div(el)
 end
 
 local function transform_codeblock(el)
-  local rendered = render_blocks({ el })
   local language = el.classes and el.classes[1] or nil
   local caption = title_case(language)
 
@@ -240,10 +266,7 @@ local function transform_codeblock(el)
     caption = "Code Example"
   end
 
-  return pandoc.RawBlock(
-    "typst",
-    string.format("#exampleblock([%s])[\n%s\n]", caption, rendered)
-  )
+  return codeexample_block(caption, el, block_identifier(el))
 end
 
 function Pandoc(doc)
@@ -253,9 +276,12 @@ function Pandoc(doc)
     doc.blocks:insert(1, section_numbering_block)
   end
 
-  return doc:walk({
+  doc = doc:walk({
     Figure = transform_figure,
     Div = transform_div,
+  })
+
+  return doc:walk({
     CodeBlock = transform_codeblock,
   })
 end
