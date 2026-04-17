@@ -7,6 +7,9 @@ local labels = {
 }
 
 local section_numbering_block = nil
+local document_dir = nil
+local images_dir = nil
+local resolved_images_dir = nil
 
 local function has_class(classes, wanted)
   for _, class in ipairs(classes) do
@@ -74,10 +77,14 @@ local function block_identifier(el)
   return nil
 end
 
-function Meta(meta)
+local function configure_from_meta(meta)
+  document_dir = meta.docdir and pandoc.utils.stringify(meta.docdir) or ""
+  images_dir = meta.imagesdir and pandoc.utils.stringify(meta.imagesdir) or ""
+  resolved_images_dir = meta.resolvedimagesdir and pandoc.utils.stringify(meta.resolvedimagesdir) or ""
+
   if not meta_enabled(meta.sectnums) then
     section_numbering_block = nil
-    return meta
+    return
   end
 
   local depth = tonumber(pandoc.utils.stringify(meta.sectnumlevels or "3")) or 3
@@ -91,17 +98,9 @@ function Meta(meta)
   end
 
   section_numbering_block = pandoc.RawBlock("typst", table.concat(lines, "\n"))
-  return meta
 end
 
-function Pandoc(doc)
-  if section_numbering_block then
-    doc.blocks:insert(1, section_numbering_block)
-  end
-  return doc
-end
-
-function Figure(el)
+local function transform_figure(el)
   if #el.content ~= 1 then
     return nil
   end
@@ -117,8 +116,18 @@ function Figure(el)
 
   local image = first.content[1]
   local src = image.src
-  if not string.find(src, "/") then
-    src = "assets/images/" .. src
+  local current_images_dir = images_dir or ""
+  local current_document_dir = document_dir or ""
+  local current_resolved_images_dir = resolved_images_dir or ""
+  local used_resolved_images_dir = false
+  if current_resolved_images_dir ~= "" and not string.match(src, "^/") and not string.match(src, "^[A-Za-z]+://") and not string.find(src, "/") then
+    src = current_resolved_images_dir .. "/" .. src
+    used_resolved_images_dir = true
+  elseif current_images_dir ~= "" and not string.match(src, "^/") and not string.match(src, "^[A-Za-z]+://") and not string.find(src, "/") then
+    src = current_images_dir .. "/" .. src
+  end
+  if not used_resolved_images_dir and current_document_dir ~= "" and not string.match(src, "^/") and not string.match(src, "^[A-Za-z]+://") then
+    src = current_document_dir .. "/" .. src
   end
   local alt = pandoc.utils.stringify(image.caption or {})
   local caption = render_blocks(caption_blocks(el.caption))
@@ -140,7 +149,7 @@ function Figure(el)
   return pandoc.RawBlock("typst", raw)
 end
 
-function Div(el)
+local function transform_div(el)
   local kind = nil
 
   for _, class in ipairs(el.classes) do
@@ -203,5 +212,18 @@ function Div(el)
     pandoc.RawBlock("typst", string.format("#admonition(%q, %q)[", kind, title)),
     table.unpack(content),
     pandoc.RawBlock("typst", "]"),
+  })
+end
+
+function Pandoc(doc)
+  configure_from_meta(doc.meta)
+
+  if section_numbering_block then
+    doc.blocks:insert(1, section_numbering_block)
+  end
+
+  return doc:walk({
+    Figure = transform_figure,
+    Div = transform_div,
   })
 end

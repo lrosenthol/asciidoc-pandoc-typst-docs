@@ -1,0 +1,40 @@
+== Nested Headings
+
+=== Second-Level Section
+
+This heading should display a composite number.
+
+==== Third-Level Section
+
+This heading should also be numbered because `:sectnumlevels: 3` is enabled.
+
+.Feature matrix with stub entries in the first column
+|===
+|Column |Expected behavior
+
+|Header row
+|Centered and emphasized
+
+|Body row
+|Start-aligned so LTR content reads left-aligned and RTL content reads right-aligned
+|===
+
+.Validation payload emitted by the pipeline
+====
+{
+  "doc": "numbered-report",
+  "examples": 2,
+  "figures": 1,
+  "pdf_standard": "ua-1"
+}
+====
+
+.Cross-reference snippet used in procedural guidance
+====
+1. Build the report with `make DOC=numbered-report pdf`.
+2. Build again with `PDF_STANDARD=ua-1` when you need an accessibility-focused deliverable.
+3. Switch to `PDF_STANDARD=a-2u` when archival requirements are the priority.
+====
+
+.Pipeline validation stages
+image::pipeline-architecture.svg[Alt text describing the sequence of AsciiDoc authoring, Pandoc conversion, Typst styling, and final PDF generation.]

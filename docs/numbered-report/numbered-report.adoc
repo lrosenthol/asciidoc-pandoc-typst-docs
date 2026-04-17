@@ -1,0 +1,19 @@
+= Numbered Report Validation
+Leonard Rosenthol
+:sectionsdir: sections
+:assetdir: assets
+:imagesdir: assets/images
+:toc:
+:toclevels: 3
+:sectnums:
+:sectnumlevels: 3
+
+This document exists to validate section numbering, mixed heading depths, tables, admonitions, and code fragments in the Docker-based pipeline.
+
+include::sections/01-introduction.adoc[]
+
+include::sections/02-data-example.adoc[]
+
+include::sections/03-nested-headings.adoc[]
+
+include::sections/04-conclusion.adoc[]

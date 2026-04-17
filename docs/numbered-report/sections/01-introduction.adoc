@@ -1,0 +1,12 @@
+== Introduction
+
+The report uses numbered sections through level three.
+
+=== Goals
+
+- confirm numbered headings
+- confirm source code rendering
+- confirm admonition styling
+
+.Overview of numbering tracks used in the validation document
+image::numbering-overview.svg[Alt text describing separate counters for sections, figures, and examples that stay coordinated across the report.]

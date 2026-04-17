@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420" role="img" aria-labelledby="title desc">
+  <title id="title">Pipeline architecture</title>
+  <desc id="desc">A left to right workflow showing AsciiDoc source, Pandoc conversion, Typst styling, and final PDF output.</desc>
+  <rect width="960" height="420" fill="#f7f8fb"/>
+  <rect x="70" y="130" width="180" height="120" rx="14" fill="#ffffff" stroke="#c8d1dc" stroke-width="3"/>
+  <rect x="310" y="130" width="180" height="120" rx="14" fill="#ffffff" stroke="#c8d1dc" stroke-width="3"/>
+  <rect x="550" y="130" width="180" height="120" rx="14" fill="#ffffff" stroke="#c8d1dc" stroke-width="3"/>
+  <rect x="790" y="130" width="110" height="120" rx="14" fill="#ffffff" stroke="#c8d1dc" stroke-width="3"/>
+  <text x="160" y="178" font-family="'Source Sans 3', sans-serif" font-size="26" text-anchor="middle" fill="#14355b">AsciiDoc</text>
+  <text x="160" y="210" font-family="'Source Sans 3', sans-serif" font-size="18" text-anchor="middle" fill="#4a627c">semantic source</text>
+  <text x="400" y="178" font-family="'Source Sans 3', sans-serif" font-size="26" text-anchor="middle" fill="#14355b">Pandoc</text>
+  <text x="400" y="210" font-family="'Source Sans 3', sans-serif" font-size="18" text-anchor="middle" fill="#4a627c">AST and filters</text>
+  <text x="640" y="178" font-family="'Source Sans 3', sans-serif" font-size="26" text-anchor="middle" fill="#14355b">Typst</text>
+  <text x="640" y="210" font-family="'Source Sans 3', sans-serif" font-size="18" text-anchor="middle" fill="#4a627c">presentation layer</text>
+  <text x="845" y="178" font-family="'Source Sans 3', sans-serif" font-size="26" text-anchor="middle" fill="#14355b">PDF</text>
+  <text x="845" y="210" font-family="'Source Sans 3', sans-serif" font-size="18" text-anchor="middle" fill="#4a627c">deliverable</text>
+  <path d="M250 190h55" stroke="#1d4ed8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M490 190h55" stroke="#1d4ed8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M730 190h50" stroke="#1d4ed8" stroke-width="6" stroke-linecap="round"/>
+  <polygon points="302,190 286,180 286,200" fill="#1d4ed8"/>
+  <polygon points="542,190 526,180 526,200" fill="#1d4ed8"/>
+  <polygon points="782,190 766,180 766,200" fill="#1d4ed8"/>
+</svg>

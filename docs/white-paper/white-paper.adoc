@@ -1,9 +1,11 @@
 = AsciiDoc Document Production with Pandoc and Typst
 Leonard Rosenthol
+:sectionsdir: sections
+:assetdir: assets
+:imagesdir: assets/images
 :toc:
 :toclevels: 2
 :sectnums:
-:imagesdir: ../assets/images
 :figure-caption: Figure
 :table-caption: Table
 

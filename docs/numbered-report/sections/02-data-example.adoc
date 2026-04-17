@@ -1,0 +1,48 @@
+== Data Example
+
+[source,json]
+----
+{
+  "document": "numbered-report",
+  "author": "Leonard Rosenthol",
+  "compliance": {
+    "pdf_standard": "ua-1",
+    "tagged_pdf": true
+  },
+  "sections": [
+    "Introduction",
+    "Data Example",
+    "Nested Headings"
+  ]
+}
+----
+
+[source,json]
+----
+[
+  {
+    "id": "fig-1",
+    "type": "image",
+    "caption": "Overview of numbering tracks used in the validation document"
+  },
+  {
+    "id": "ex-1",
+    "type": "example",
+    "caption": "Validation payload emitted by the pipeline"
+  }
+]
+----
+
+[source,xml]
+----
+<document type="report">
+  <title>Numbered Report Validation</title>
+  <author>Leonard Rosenthol</author>
+  <standard profile="ua-1"/>
+</document>
+----
+
+[WARNING]
+====
+If you request a PDF conformance profile such as `a-2u` or `ua-1`, Typst will enforce the relevant rules during export and fail the build when the document violates them.
+====
