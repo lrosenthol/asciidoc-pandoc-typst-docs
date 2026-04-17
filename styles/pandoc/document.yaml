@@ -1,0 +1,10 @@
+lang: en
+mainfont: Source Sans 3
+codefont: Source Code Pro
+fontsize: 10.5pt
+linestretch: 1.15
+margin:
+  top: 0.9in
+  bottom: 1.0in
+  left: 1.0in
+  right: 1.0in

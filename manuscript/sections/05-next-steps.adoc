@@ -1,0 +1,10 @@
+== Next Steps
+
+The most common next upgrades for this baseline are:
+
+- bibliography and citation support
+- custom title and cover pages
+- branded color, logo, and spacing systems
+- multiple output documents sharing the same style layer
+
+See <<table-behavior>> for the current baseline behavior of core document features.

@@ -1,0 +1,11 @@
+== Executive Summary
+
+This project provides a production-style baseline for writing long-form documents in AsciiDoc and rendering them to PDF through Pandoc and Typst.
+
+It is designed around three practical goals:
+
+- keep authoring semantic and readable in plain text
+- make PDF generation reproducible through Docker
+- preserve enough structure to style the final document intentionally
+
+NOTE: The pipeline works best when the source emphasizes document structure rather than backend-specific presentation.

@@ -1,0 +1,18 @@
+= AsciiDoc Document Production with Pandoc and Typst
+Lewis Rosenthal
+:toc:
+:toclevels: 2
+:sectnums:
+:imagesdir: ../assets/images
+:figure-caption: Figure
+:table-caption: Table
+
+include::sections/01-executive-summary.adoc[]
+
+include::sections/02-why-this-pipeline.adoc[]
+
+include::sections/03-admonitions-and-structure.adoc[]
+
+include::sections/04-production-guidance.adoc[]
+
+include::sections/05-next-steps.adoc[]

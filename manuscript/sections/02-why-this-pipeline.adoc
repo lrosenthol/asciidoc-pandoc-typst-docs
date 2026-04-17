@@ -1,0 +1,12 @@
+== Why This Pipeline
+
+AsciiDoc is a strong authoring format for technical and report-oriented writing because it handles sections, lists, tables, footnotes, source blocks, and cross-references well in plain text.
+
+Pandoc provides the conversion layer and a programmable abstract syntax tree, which makes it practical to normalize or restyle features that do not map cleanly by default.
+
+Typst provides fast PDF generation and a modern styling model that is easier to shape intentionally than many traditional PDF toolchains.
+
+[TIP]
+====
+For production work, treat AsciiDoc as your semantic source of truth and Typst as the presentation layer.
+====

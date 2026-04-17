@@ -1,0 +1,35 @@
+== Admonitions and Structure
+
+Admonitions are a good example of where semantic preservation and visual rendering need to be separated.
+
+[IMPORTANT]
+.Semantic vs. Visual Behavior
+====
+Pandoc recognizes AsciiDoc admonitions semantically, but the default Typst output does not render them as designed callout boxes. This project handles that gap with a Lua filter and Typst macros.
+====
+
+The current starter preserves these admonition types:
+
+- `NOTE`
+- `TIP`
+- `IMPORTANT`
+- `CAUTION`
+- `WARNING`
+
+[[table-behavior]]
+.Feature behavior through the pipeline
+|===
+|Feature |Behavior in this project
+
+|Headings and sections
+|Translate cleanly and are styled by the Typst layer
+
+|Footnotes
+|Translate well with Pandoc and Typst
+
+|Code blocks
+|Use Source Code Pro and preserve language tags
+
+|Admonitions
+|Normalized through the filter and rendered as styled callouts
+|===

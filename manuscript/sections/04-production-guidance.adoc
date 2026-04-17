@@ -1,0 +1,22 @@
+== Production Guidance
+
+The current layout is intended for white papers, strategy papers, formal reports, and other narrative documents that may eventually grow into multi-section publications.
+
+[source,make]
+----
+make pdf
+make DOC=white-paper typst
+----
+
+Recommended working practices:
+
+- keep the main document as an include-driven entrypoint
+- store reusable images under `assets/images`
+- keep conversion logic in `styles/filters`
+- keep visual rules in `styles/typst`
+- add new report entrypoints under `manuscript/`
+
+[CAUTION]
+====
+If you introduce raw backend-specific markup, extension-generated content, or very complex tables, test the conversion early instead of assuming they will survive unchanged.
+====
