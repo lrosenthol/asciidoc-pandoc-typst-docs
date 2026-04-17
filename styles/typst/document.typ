@@ -6,7 +6,9 @@
 #show raw.where(block: true): set text(size: 0.92em)
 
 #show heading.where(level: 1): set text(fill: rgb("#0f2d52"))
+#show heading.where(level: 1): set block(above: 1.5em, below: 1em)
 #show heading.where(level: 2): set text(fill: rgb("#163d6b"))
+#show heading.where(level: 2): set block(above: 1.2em, below: 1em)
 
 #show figure.where(kind: table): set figure.caption(position: bottom)
 #show figure.where(kind: table): set block(below: 1.1em)
@@ -48,13 +50,7 @@
   )
 }
 
-#let codeexample(caption, language, source) = {
-  let rendered = if language == none {
-    raw(source, block: true)
-  } else {
-    raw(source, lang: language, block: true)
-  }
-
+#let codeexample(caption, body) = {
   figure(
     grid(
       columns: (1fr, 92%, 1fr),
@@ -67,7 +63,7 @@
         fill: luma(250),
         breakable: true,
       )[
-        #align(start)[#rendered]
+        #align(start)[#body]
       ],
       [],
     ),

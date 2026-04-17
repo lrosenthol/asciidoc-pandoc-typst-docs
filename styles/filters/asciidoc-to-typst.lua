@@ -92,21 +92,20 @@ local function title_case(value)
 end
 
 local function codeexample_block(caption, el, identifier)
-  local language = el.classes and el.classes[1] or nil
   local caption_markup = caption and string.format("[%s]", caption) or "none"
-  local language_markup = language and string.format("%q", language) or "none"
-  local raw = string.format(
-    "#codeexample(%s, %s, %q)",
-    caption_markup,
-    language_markup,
-    el.text
-  )
+  local rendered = render_blocks({ el })
+  local blocks = pandoc.List({
+    pandoc.RawBlock("typst", string.format("#codeexample(%s)[", caption_markup)),
+    pandoc.RawBlock("typst", rendered),
+  })
 
+  local closing = "]"
   if identifier then
-    raw = raw .. string.format(" <%s>", identifier)
+    closing = closing .. string.format(" <%s>", identifier)
   end
+  blocks:insert(pandoc.RawBlock("typst", closing))
 
-  return pandoc.RawBlock("typst", raw)
+  return blocks
 end
 
 local function configure_from_meta(meta)
