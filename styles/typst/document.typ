@@ -1,20 +1,24 @@
 #set page(
-  paper: "us-letter"
+  paper: "us-letter",
+    margin: (left: 25mm, right: 25mm, top: 25mm, bottom: 30mm),
+    numbering: "1",
+    number-align: right,
 )
 
 #show raw: set text(font: "Source Code Pro")
 #show raw.where(block: true): set text(size: 0.92em)
 
+#set heading(numbering: "1.1")
 #show heading.where(level: 1): set text(fill: rgb("#0f2d52"))
-#show heading.where(level: 1): set block(above: 1.5em, below: 1em)
+#show heading.where(level: 1): set block(above: 2em, below: 1em)
 #show heading.where(level: 2): set text(fill: rgb("#163d6b"))
-#show heading.where(level: 2): set block(above: 1.2em, below: 1em)
+#show heading.where(level: 2): set block(above: 1.5em, below: 1em)
 
 #show figure.where(kind: table): set figure.caption(position: bottom)
-#show figure.where(kind: table): set block(below: 1.1em)
-#show figure.where(kind: image): set block(below: 1.1em)
+#show figure.where(kind: table): set block(below: 1.5em)
+#show figure.where(kind: image): set block(below: 1.5em)
 #show figure.where(kind: "example"): set figure.caption(position: bottom)
-#show figure.where(kind: "example"): set block(below: 1.1em)
+#show figure.where(kind: "example"): set block(below: 1.5em)
 #show table.header: set align(center)
 #show table.header: set text(weight: "semibold")
 
