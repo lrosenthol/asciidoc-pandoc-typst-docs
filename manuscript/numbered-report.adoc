@@ -1,0 +1,66 @@
+= Numbered Report Validation
+Leonard Rosenthol
+:toc:
+:toclevels: 3
+:sectnums:
+:sectnumlevels: 3
+
+This document exists to validate section numbering, mixed heading depths, tables, admonitions, and code fragments in the Docker-based pipeline.
+
+== Introduction
+
+The report uses numbered sections through level three.
+
+=== Goals
+
+- confirm numbered headings
+- confirm source code rendering
+- confirm admonition styling
+
+== Data Example
+
+[source,json]
+----
+{
+  "document": "numbered-report",
+  "author": "Leonard Rosenthol",
+  "compliance": {
+    "pdf_standard": "ua-1",
+    "tagged_pdf": true
+  },
+  "sections": [
+    "Introduction",
+    "Data Example",
+    "Nested Headings"
+  ]
+}
+----
+
+[WARNING]
+====
+If you request a PDF conformance profile such as `a-2u` or `ua-1`, Typst will enforce the relevant rules during export and fail the build when the document violates them.
+====
+
+== Nested Headings
+
+=== Second-Level Section
+
+This heading should display a composite number.
+
+==== Third-Level Section
+
+This heading should also be numbered because `:sectnumlevels: 3` is enabled.
+
+|===
+|Column |Expected behavior
+
+|Header row
+|Centered and emphasized
+
+|Body row
+|Start-aligned so LTR content reads left-aligned and RTL content reads right-aligned
+|===
+
+== Conclusion
+
+The report confirms that numbering, JSON code blocks, and shared document styling work together.

@@ -1,5 +1,5 @@
 = AsciiDoc Document Production with Pandoc and Typst
-Lewis Rosenthal
+Leonard Rosenthol
 :toc:
 :toclevels: 2
 :sectnums:

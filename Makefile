@@ -28,6 +28,8 @@ SOURCE = $(MANUSCRIPT_DIR)/$(DOC).adoc
 TYPST_OUT = $(BUILD_DIR)/$(DOC).typ
 PDF_OUT = $(BUILD_DIR)/$(DOC).pdf
 NATIVE_OUT = $(BUILD_DIR)/$(DOC).native
+PDF_STANDARD ?=
+PDF_TAGS ?= on
 COMMON_PANDOC_FLAGS = \
 	--from=asciidoc \
 	--standalone \
@@ -39,7 +41,15 @@ COMMON_PANDOC_FLAGS = \
 	--pdf-engine-opt=--font-path=$(SOURCE_CODE_DIR) \
 	--pdf-engine-opt=--ignore-system-fonts
 
-.PHONY: all help pdf typst native fonts clean
+ifneq ($(strip $(PDF_STANDARD)),)
+COMMON_PANDOC_FLAGS += --pdf-engine-opt=--pdf-standard=$(PDF_STANDARD)
+endif
+
+ifeq ($(PDF_TAGS),off)
+COMMON_PANDOC_FLAGS += --pdf-engine-opt=--no-pdf-tags
+endif
+
+.PHONY: all help pdf typst native fonts clean FORCE
 
 all: pdf
 
@@ -50,24 +60,27 @@ help:
 		'make native             Inspect Pandoc AST for debugging conversions' \
 		'make fonts              Show fonts discovered by Typst in the container' \
 		'make DOC=report pdf     Build a different manuscript entrypoint' \
+		'make PDF_STANDARD=ua-1 pdf    Build a PDF/UA-1 file' \
+		'make PDF_STANDARD=a-2u pdf    Build a PDF/A-2u file' \
+		'make PDF_TAGS=off pdf         Disable Tagged PDF output' \
 		'make clean              Remove generated files'
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-typst: $(TYPST_OUT)
+typst: FORCE $(TYPST_OUT)
 
-$(TYPST_OUT): $(SOURCE) $(PANDOC_METADATA) styles/filters/admonitions-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
+$(TYPST_OUT): FORCE $(SOURCE) $(PANDOC_METADATA) styles/filters/admonitions-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
 	$(PANDOC) $(COMMON_PANDOC_FLAGS) --to=typst $(SOURCE) -o $(TYPST_OUT)
 
-pdf: $(PDF_OUT)
+pdf: FORCE $(PDF_OUT)
 
-$(PDF_OUT): $(SOURCE) $(PANDOC_METADATA) styles/filters/admonitions-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
+$(PDF_OUT): FORCE $(SOURCE) $(PANDOC_METADATA) styles/filters/admonitions-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
 	$(PANDOC) $(COMMON_PANDOC_FLAGS) --pdf-engine=typst $(SOURCE) -o $(PDF_OUT)
 
-native: $(NATIVE_OUT)
+native: FORCE $(NATIVE_OUT)
 
-$(NATIVE_OUT): $(SOURCE) | $(BUILD_DIR)
+$(NATIVE_OUT): FORCE $(SOURCE) | $(BUILD_DIR)
 	$(PANDOC) --from=asciidoc --to=native $(SOURCE) -o $(NATIVE_OUT)
 
 fonts:
@@ -75,3 +88,5 @@ fonts:
 
 clean:
 	rm -f $(BUILD_DIR)/*.typ $(BUILD_DIR)/*.pdf $(BUILD_DIR)/*.native
+
+FORCE:

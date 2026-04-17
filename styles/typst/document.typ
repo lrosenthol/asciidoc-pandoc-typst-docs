@@ -6,54 +6,59 @@
 
 #show figure.where(kind: table): set block(below: 1.1em)
 #show figure.where(kind: image): set block(below: 1.1em)
+#show table.header: set align(center)
+#show table.header: set text(weight: "semibold")
+
+#set table(align: start)
 
 #let admonition(kind, title, body) = {
   let palette = (
     note: (
       accent: rgb("#1d4ed8"),
-      border: rgb("#93c5fd"),
-      fill: rgb("#eff6ff"),
+      label: "NOTE",
+      default-title: "Note",
     ),
     tip: (
       accent: rgb("#047857"),
-      border: rgb("#6ee7b7"),
-      fill: rgb("#ecfdf5"),
+      label: "TIP",
+      default-title: "Tip",
     ),
     important: (
-      accent: rgb("#7c3aed"),
-      border: rgb("#c4b5fd"),
-      fill: rgb("#f5f3ff"),
+      accent: rgb("#5b21b6"),
+      label: "IMPORTANT",
+      default-title: "Important",
     ),
     caution: (
       accent: rgb("#b45309"),
-      border: rgb("#fcd34d"),
-      fill: rgb("#fffbeb"),
+      label: "CAUTION",
+      default-title: "Caution",
     ),
     warning: (
       accent: rgb("#b91c1c"),
-      border: rgb("#fca5a5"),
-      fill: rgb("#fef2f2"),
+      label: "WARNING",
+      default-title: "Warning",
     ),
   )
 
   let style = palette.at(kind)
 
   block(
-    inset: 12pt,
+    inset: (left: 12pt, right: 0pt, top: 3pt, bottom: 3pt),
     above: 1em,
     below: 1em,
-    fill: style.fill,
     stroke: (
       left: 4pt + style.accent,
-      right: 1pt + style.border,
-      top: 1pt + style.border,
-      bottom: 1pt + style.border,
     ),
-    radius: 6pt,
     breakable: true,
   )[
-    #text(weight: "bold", fill: style.accent)[#title]
-    #v(0.45em)
-    #body
+    #text(size: 0.78em, weight: "bold", tracking: 0.08em, fill: style.accent)[#style.label]
+    #if title != style.default-title {
+      parbreak()
+      text(weight: "semibold")[#title]
+      v(0.35em)
+    } else {
+      v(0.3em)
+    }
+    #block(inset: (left: 0.2em, right: 0pt, top: 0pt, bottom: 0pt))[#body]
   ]
 }
