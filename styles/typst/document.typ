@@ -1,3 +1,7 @@
+#set page(
+  paper: "us-letter"
+)
+
 #show raw: set text(font: "Source Code Pro")
 #show raw.where(block: true): set text(size: 0.92em)
 
@@ -34,7 +38,7 @@
         fill: luma(250),
         breakable: true,
       )[
-        #body
+        #align(start)[#body]
       ],
       [],
     ),
@@ -63,7 +67,7 @@
         fill: luma(250),
         breakable: true,
       )[
-        #rendered
+        #align(start)[#rendered]
       ],
       [],
     ),
