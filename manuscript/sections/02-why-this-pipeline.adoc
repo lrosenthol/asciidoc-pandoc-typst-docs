@@ -10,3 +10,6 @@ Typst provides fast PDF generation and a modern styling model that is easier to 
 ====
 For production work, treat AsciiDoc as your semantic source of truth and Typst as the presentation layer.
 ====
+
+.Pipeline architecture from source to deliverable
+image::pipeline-architecture.svg[Alt text describing a left-to-right workflow from AsciiDoc through Pandoc and Typst to a final PDF deliverable.]

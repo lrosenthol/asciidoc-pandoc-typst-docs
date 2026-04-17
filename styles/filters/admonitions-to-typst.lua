@@ -42,6 +42,38 @@ local function section_pattern(level)
   return table.concat(parts, ".") .. "."
 end
 
+local function render_blocks(blocks)
+  if not blocks or #blocks == 0 then
+    return ""
+  end
+
+  return pandoc.write(pandoc.Pandoc(blocks), "typst"):gsub("%s+$", "")
+end
+
+local function caption_blocks(caption)
+  if not caption then
+    return {}
+  end
+
+  if caption.long then
+    return caption.long
+  end
+
+  return caption
+end
+
+local function block_identifier(el)
+  if el.identifier and el.identifier ~= "" then
+    return el.identifier
+  end
+
+  if el.attr and el.attr.identifier and el.attr.identifier ~= "" then
+    return el.attr.identifier
+  end
+
+  return nil
+end
+
 function Meta(meta)
   if not meta_enabled(meta.sectnums) then
     section_numbering_block = nil
@@ -69,6 +101,45 @@ function Pandoc(doc)
   return doc
 end
 
+function Figure(el)
+  if #el.content ~= 1 then
+    return nil
+  end
+
+  local first = el.content[1]
+  if first.t ~= "Plain" and first.t ~= "Para" then
+    return nil
+  end
+
+  if #first.content ~= 1 or first.content[1].t ~= "Image" then
+    return nil
+  end
+
+  local image = first.content[1]
+  local src = image.src
+  if not string.find(src, "/") then
+    src = "assets/images/" .. src
+  end
+  local alt = pandoc.utils.stringify(image.caption or {})
+  local caption = render_blocks(caption_blocks(el.caption))
+  local raw = string.format('#imagefigure(%q, %q', src, alt)
+
+  if caption ~= "" then
+    raw = raw .. string.format(', [%s]', caption)
+  else
+    raw = raw .. ", none"
+  end
+
+  raw = raw .. ")"
+
+  local identifier = block_identifier(el)
+  if identifier then
+    raw = raw .. string.format(" <%s>", identifier)
+  end
+
+  return pandoc.RawBlock("typst", raw)
+end
+
 function Div(el)
   local kind = nil
 
@@ -81,6 +152,39 @@ function Div(el)
   end
 
   if not kind then
+    if has_class(el.classes, "example") then
+      local title = nil
+      local content = el.content
+
+      if #content > 0 then
+        local first = content[1]
+        if first.t == "Div" and has_class(first.classes, "title") then
+          title = pandoc.utils.stringify(first)
+          table.remove(content, 1)
+        end
+      end
+
+      local blocks = pandoc.List({
+        pandoc.RawBlock(
+          "typst",
+          string.format("#exampleblock(%s)[", title and string.format("[%s]", title) or "none")
+        ),
+      })
+
+      for _, block in ipairs(content) do
+        blocks:insert(block)
+      end
+
+      local closing = "]"
+      local identifier = block_identifier(el)
+      if identifier then
+        closing = closing .. string.format(" <%s>", identifier)
+      end
+      blocks:insert(pandoc.RawBlock("typst", closing))
+
+      return blocks
+    end
+
     return nil
   end
 

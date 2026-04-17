@@ -6,10 +6,35 @@
 
 #show figure.where(kind: table): set block(below: 1.1em)
 #show figure.where(kind: image): set block(below: 1.1em)
+#show figure.where(kind: "example"): set figure.caption(position: top)
 #show table.header: set align(center)
 #show table.header: set text(weight: "semibold")
 
 #set table(align: start)
+
+#let imagefigure(path, alt, caption) = {
+  figure(
+    image(path, width: 100%, alt: alt),
+    caption: caption,
+  )
+}
+
+#let exampleblock(caption, body) = {
+  figure(
+    block(
+      inset: 10pt,
+      stroke: 1pt + luma(195),
+      radius: 4pt,
+      fill: luma(250),
+      breakable: true,
+    )[
+      #body
+    ],
+    kind: "example",
+    supplement: [Example],
+    caption: caption,
+  )
+}
 
 #let admonition(kind, title, body) = {
   let palette = (

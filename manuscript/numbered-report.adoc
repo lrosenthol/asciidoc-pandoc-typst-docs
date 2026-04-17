@@ -17,6 +17,9 @@ The report uses numbered sections through level three.
 - confirm source code rendering
 - confirm admonition styling
 
+.Overview of numbering tracks used in the validation document
+image::numbering-overview.svg[Alt text describing separate counters for sections, figures, and examples that stay coordinated across the report.]
+
 == Data Example
 
 [source,json]
@@ -36,6 +39,31 @@ The report uses numbered sections through level three.
 }
 ----
 
+[source,json]
+----
+[
+  {
+    "id": "fig-1",
+    "type": "image",
+    "caption": "Overview of numbering tracks used in the validation document"
+  },
+  {
+    "id": "ex-1",
+    "type": "example",
+    "caption": "Validation payload emitted by the pipeline"
+  }
+]
+----
+
+[source,xml]
+----
+<document type="report">
+  <title>Numbered Report Validation</title>
+  <author>Leonard Rosenthol</author>
+  <standard profile="ua-1"/>
+</document>
+----
+
 [WARNING]
 ====
 If you request a PDF conformance profile such as `a-2u` or `ua-1`, Typst will enforce the relevant rules during export and fail the build when the document violates them.
@@ -51,6 +79,7 @@ This heading should display a composite number.
 
 This heading should also be numbered because `:sectnumlevels: 3` is enabled.
 
+.Feature matrix with stub entries in the first column
 |===
 |Column |Expected behavior
 
@@ -60,6 +89,26 @@ This heading should also be numbered because `:sectnumlevels: 3` is enabled.
 |Body row
 |Start-aligned so LTR content reads left-aligned and RTL content reads right-aligned
 |===
+
+.Validation payload emitted by the pipeline
+====
+{
+  "doc": "numbered-report",
+  "examples": 2,
+  "figures": 1,
+  "pdf_standard": "ua-1"
+}
+====
+
+.Cross-reference snippet used in procedural guidance
+====
+1. Build the report with `make DOC=numbered-report pdf`.
+2. Build again with `PDF_STANDARD=ua-1` when you need an accessibility-focused deliverable.
+3. Switch to `PDF_STANDARD=a-2u` when archival requirements are the priority.
+====
+
+.Pipeline validation stages
+image::pipeline-architecture.svg[Alt text describing the sequence of AsciiDoc authoring, Pandoc conversion, Typst styling, and final PDF generation.]
 
 == Conclusion
 

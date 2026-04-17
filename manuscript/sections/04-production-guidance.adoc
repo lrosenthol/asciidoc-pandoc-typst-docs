@@ -16,6 +16,9 @@ Recommended working practices:
 - keep visual rules in `styles/typst`
 - add new report entrypoints under `manuscript/`
 
+.Counter separation for headings, figures, and examples
+image::numbering-overview.svg[Alt text describing three coordinated counters for numbered headings, image figures, and boxed examples in the final PDF.]
+
 [CAUTION]
 ====
 If you introduce raw backend-specific markup, extension-generated content, or very complex tables, test the conversion early instead of assuming they will survive unchanged.
