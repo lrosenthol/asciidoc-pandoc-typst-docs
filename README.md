@@ -6,7 +6,9 @@ It currently includes:
 
 - a white-paper style document entrypoint
 - a numbered validation report with mixed heading levels
-- bundled Source Sans 3 and Source Code Pro fonts
+- bundled Source Serif 4, Source Sans 3, and Source Code Pro fonts
+- Adobe-styled theme with serif body text and sans-serif headings
+- PlantUML diagram support with automatic pre-rendering to SVG
 - custom handling for admonitions, image figures, examples, and section numbering
 - optional PDF/UA-1 and PDF/A-2u output controls through `make`
 
@@ -55,10 +57,22 @@ Current sample entrypoints:
 
 The build is configured to use:
 
-- `Source Sans 3` for body content
+- `Source Serif 4` for body content (serif, matching Adobe document styling)
+- `Source Sans 3` for headings
 - `Source Code Pro` for inline code and code blocks
 
 Those font files are vendored into the repository so the Docker build does not rely on host-installed fonts.
+
+## PlantUML Diagrams
+
+AsciiDoc `[plantuml]` blocks are pre-rendered to SVG before the Typst build. The rendering script at `scripts/render-plantuml.py` walks all `.adoc` files, extracts PlantUML blocks, hashes their content, and renders each unique diagram using the `plantuml/plantuml` Docker image. Results are cached in `build/plantuml/` so unchanged diagrams are not re-rendered.
+
+The `plantuml` target runs automatically as a prerequisite of both `typst` and `pdf`:
+
+```sh
+make plantuml          # pre-render diagrams only
+make pdf               # runs plantuml automatically before building PDFs
+```
 
 ## What The Filter Does
 
