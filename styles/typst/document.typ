@@ -19,8 +19,21 @@
 #show figure.where(kind: image): set block(below: 1.5em)
 #show figure.where(kind: "example"): set figure.caption(position: bottom)
 #show figure.where(kind: "example"): set block(below: 1.5em)
-#show table.header: set align(center)
-#show table.header: set text(weight: "semibold")
+
+#let frame(stroke) = (x, y) => (
+  left: if x > 0 { 0pt } else { stroke },
+  right: stroke,
+  top: stroke,
+  bottom: stroke,
+)
+#set table(
+  fill: (none),
+  stroke: frame(1pt + rgb("21222C")),
+)
+
+#show table.cell: set align(start)
+#show table.cell.where(y: 0): set align(center)
+#show table.cell.where(y: 0): set text(weight: "semibold")
 
 #set table(align: start)
 

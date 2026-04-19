@@ -16,4 +16,6 @@ include::sections/02-data-example.adoc[]
 
 include::sections/03-nested-headings.adoc[]
 
+include::sections/03a-real-world.adoc[]
+
 include::sections/04-conclusion.adoc[]

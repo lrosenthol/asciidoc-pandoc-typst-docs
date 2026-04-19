@@ -1,0 +1,80 @@
+== Some real world content
+
+=== Support for https://cawg.io[CAWG] Assertions
+
+JPEG Trust Part 1 documents usage of three of the CAWG assertions defined at https://cawg.io[].  These assertions include:
+
+* Identity assertions
+* Metadata assertions
+* Training & Data Mining assertions
+
+The C2PA specification does not define these assertions, but they are syntactically compatible with the specification but are not guaranteed to be processed by C2PA-only implementations. However, the C2PA recently issued an https://spec.c2pa.org/specifications/specifications/2.4/identity/identity.html[informative document] that recommends the use of CAWG Identity assertions for human and organizational identity information.
+
+=== Normative References
+
+[cols="1,3"]
+|===
+| Identifier | Document
+
+| https://spec.c2pa.org[_Content Credentials_]
+| C2PA Technical Specification (v2.4), Coalition for Content Provenance and Authenticity
+
+| https://jpeg.org/jpegtrust/index.html[_JPEG Trust_]
+| ISO/IEC DIS 21617-1 ed. 2, _Information technology — Coding of digital representations of media — Part 1: JPEG Trust_
+
+| https://cv.iptc.org/newscodes/digitalsourcetype/[_IPTC Digital Source Types_]
+| IPTC Digital Source Type NewsCodes
+
+| https://www.rfc-editor.org/rfc/rfc8949.html[_RFC 8949_]
+| Bormann, C. and P. Hoffman, "Concise Binary Object Representation (CBOR)", RFC 8949, December 2020
+
+| https://www.rfc-editor.org/rfc/rfc3161.html[_RFC 3161_]
+| Adams, C. et al., "Internet X.509 PKI Time-Stamp Protocol (TSP)", RFC 3161, August 2001
+|===
+
+=== The C2PA Provenance Model
+
+The C2PA Technical Specification defines a provenance model centred on three core artifacts [C2PA §2.3]:
+
+**Assertion**:: A data structure representing a statement — either created by the signer or gathered at claim generation time — concerning an asset. Assertions cover areas such as asset creation, edit actions, capture device details, bindings to content, and metadata.
+
+**Claim**:: A digitally signed, tamper-evident data structure that references a set of assertions and the information necessary to represent the content binding [C2PA §2.3.2].
+
+**Claim Signature**:: The digital signature on the claim created using the private key owned by a signer [C2PA §2.3.3].
+
+[NOTE]
+====
+The `digitalSourceType` field on an ingredient assertion cannot be combined with an `activeManifest` field — the presence of both constitutes a validation failure [C2PA §15.11.3.2]. Its purpose is specifically to characterise ingredients that lack their own provenance record, preserving the descriptive integrity of the overall provenance chain. This mechanism is particularly relevant in Generative AI workflows where a model may incorporate style-reference assets or training exemplars that predate this ecosystem.
+====
+
+=== PlantUML Diagram
+
+.C2PA Manifest Store Structure (derived from C2PA §11.1.4)
+[plantuml]
+....
+@startuml
+top to bottom direction
+
+rectangle "C2PA Manifest Store\nContent Credentials" as A
+rectangle "Active Manifest" as B
+rectangle "Ingredient Manifest 1" as C
+rectangle "Assertion Store" as E
+rectangle "Claim" as F
+rectangle "Claim Signature\nCOSE Sign1" as G
+rectangle "c2pa.hash.data\nHard Binding" as H
+rectangle "c2pa.actions.v2\nAction Assertions" as I
+rectangle "c2pa.ingredient.v3\ninputTo — Prompt / Ref Image" as J
+rectangle "c2pa.ai-disclosure" as K
+
+A --> B
+A --> C
+B --> E
+B --> F
+B --> G
+E --> H
+E --> I
+E --> J
+E --> K
+@enduml
+....
+
