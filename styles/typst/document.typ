@@ -5,20 +5,51 @@
     number-align: right,
 )
 
-#show raw: set text(font: "Source Code Pro")
+// Paragraph
+#set par(
+  leading: 0.75em,
+  justify: true,
+)
+
+#set text(font: "Source Serif 4", size: 11pt)
+#show heading: set text(font: "Source Sans 3")
+#show raw: set text(font: "Source Code Pro", size: 10pt)
 #show raw.where(block: true): set text(size: 0.92em)
 
 #set heading(numbering: "1.1")
-#show heading.where(level: 1): set text(fill: rgb("#0f2d52"))
-#show heading.where(level: 1): set block(above: 2em, below: 1em)
-#show heading.where(level: 2): set text(fill: rgb("#163d6b"))
-#show heading.where(level: 2): set block(above: 1.5em, below: 1em)
+#show heading.where(level: 1): it => {
+  v(2em, weak: false)
+  block(above: 0pt, below: 0.5em, breakable: false)[
+    #set text(size: 22pt, weight: "black", fill: rgb("#0f2d52"))
+    #it
+  ]
+}
+#show heading.where(level: 2): it => {
+  v(1.5em, weak: false)
+  block(above: 0pt, below: 0.5em, breakable: false)[
+    #set text(size: 15pt, weight: "bold", fill: rgb("#163d6b"))
+    #it
+  ]
+}
+#show heading.where(level: 3): it => {
+  v(1.5em, weak: false)
+  block(above: 0pt, below: 0.5em, breakable: false)[
+    #set text(size: 13pt, weight: "bold", fill: rgb("#163d6b"))
+    #it
+  ]
+}
 
-#show figure.where(kind: table): set figure.caption(position: bottom)
-#show figure.where(kind: table): set block(below: 1.5em)
-#show figure.where(kind: image): set block(below: 1.5em)
-#show figure.where(kind: "example"): set figure.caption(position: bottom)
-#show figure.where(kind: "example"): set block(below: 1.5em)
+#show figure.where(kind: table): it => {
+  set figure.caption(position: bottom)
+  block(above: 2em, below: 1.5em)[#it]
+}
+#show figure.where(kind: image): it => {
+  block(above: 2em, below: 1.5em)[#it]
+}
+#show figure.where(kind: "example"): it => {
+  set figure.caption(position: bottom)
+  block(above: 2em, below: 1.5em)[#it]
+}
 
 #let frame(stroke) = (x, y) => (
   left: if x > 0 { 0pt } else { stroke },

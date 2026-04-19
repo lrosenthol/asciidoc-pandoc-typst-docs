@@ -8,6 +8,7 @@ GID := $(shell id -g)
 HOST_WORKDIR ?= $(subst /Library/CloudStorage/OneDrive-Adobe/Documents,/Documents,$(CURDIR))
 FONT_DIR := assets/fonts
 SOURCE_SANS_DIR := $(FONT_DIR)/source-sans-3
+SOURCE_SERIF_DIR := $(FONT_DIR)/source-serif-4
 SOURCE_CODE_DIR := $(FONT_DIR)/source-code-pro
 PANDOC_METADATA := styles/pandoc/document.yaml
 DOC_ASSET_DIR ?= assets
@@ -40,6 +41,7 @@ COMMON_PANDOC_FLAGS = \
 	--lua-filter=styles/filters/asciidoc-to-typst.lua \
 	--include-in-header=styles/typst/document.typ \
 	--pdf-engine-opt=--font-path=$(SOURCE_SANS_DIR) \
+	--pdf-engine-opt=--font-path=$(SOURCE_SERIF_DIR) \
 	--pdf-engine-opt=--font-path=$(SOURCE_CODE_DIR) \
 	--pdf-engine-opt=--ignore-system-fonts
 
@@ -97,7 +99,7 @@ $(BUILD_DIR)/%.native: FORCE | $(BUILD_DIR)
 	$(PANDOC) --from=asciidoc --to=native $(DOCS_DIR)/$*/$*.adoc -o $@
 
 fonts:
-	$(TYPST_RUN) fonts --font-path $(SOURCE_SANS_DIR) --font-path $(SOURCE_CODE_DIR) --ignore-system-fonts
+	$(TYPST_RUN) fonts --font-path $(SOURCE_SANS_DIR) --font-path $(SOURCE_SERIF_DIR) --font-path $(SOURCE_CODE_DIR) --ignore-system-fonts
 
 clean:
 	rm -f $(BUILD_DIR)/*.typ $(BUILD_DIR)/*.pdf $(BUILD_DIR)/*.native
