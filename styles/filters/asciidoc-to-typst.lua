@@ -91,6 +91,21 @@ local function title_case(value)
   return table.concat(parts, " ")
 end
 
+local function is_plantuml_block(el)
+  return el.t == "CodeBlock" and el.text:match("^@startuml")
+end
+
+local function plantuml_figure(el, caption, identifier)
+  local hash = pandoc.utils.sha1(el.text):sub(1, 12)
+  local img = "build/plantuml/plantuml-" .. hash .. ".svg"
+  local cap = caption and string.format("[%s]", caption) or "none"
+  local raw = string.format('#imagefigure(%q, %q, %s)', img, "", cap)
+  if identifier then
+    raw = raw .. string.format(" <%s>", identifier)
+  end
+  return pandoc.RawBlock("typst", raw)
+end
+
 local function codeexample_block(caption, el, identifier)
   local caption_markup = caption and string.format("[%s]", caption) or "none"
   local rendered = render_blocks({ el })
@@ -186,6 +201,9 @@ local function transform_div(el)
     local second = el.content[2]
 
     if first.t == "Div" and has_class(first.classes, "title") and second.t == "CodeBlock" then
+      if is_plantuml_block(second) then
+        return plantuml_figure(second, pandoc.utils.stringify(first), block_identifier(el))
+      end
       return codeexample_block(pandoc.utils.stringify(first), second, block_identifier(el))
     end
   end
@@ -256,6 +274,10 @@ local function transform_div(el)
 end
 
 local function transform_codeblock(el)
+  if is_plantuml_block(el) then
+    return plantuml_figure(el, nil, block_identifier(el))
+  end
+
   local language = el.classes and el.classes[1] or nil
   local caption = title_case(language)
 

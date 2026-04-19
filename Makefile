@@ -1,6 +1,7 @@
 DOC ?=
 DOCS_DIR := docs
 BUILD_DIR := build
+PLANTUML_DIR := $(BUILD_DIR)/plantuml
 DOCKER_IMAGE ?= pandoc/typst:3.9-ubuntu
 CONTAINER_WORKDIR := /work
 UID := $(shell id -u)
@@ -53,7 +54,7 @@ ifeq ($(PDF_TAGS),off)
 COMMON_PANDOC_FLAGS += --pdf-engine-opt=--no-pdf-tags
 endif
 
-.PHONY: all help pdf typst native fonts clean FORCE
+.PHONY: all help pdf typst native plantuml fonts clean FORCE
 
 all: pdf
 
@@ -73,7 +74,10 @@ help:
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-typst: $(TYPST_TARGETS)
+plantuml: | $(BUILD_DIR)
+	python3 scripts/render-plantuml.py $(DOCS_DIR) $(PLANTUML_DIR)
+
+typst: plantuml $(TYPST_TARGETS)
 
 $(BUILD_DIR)/%.typ: FORCE $(PANDOC_METADATA) styles/filters/asciidoc-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
 	$(PANDOC) $(COMMON_PANDOC_FLAGS) \
@@ -83,7 +87,7 @@ $(BUILD_DIR)/%.typ: FORCE $(PANDOC_METADATA) styles/filters/asciidoc-to-typst.lu
 		--metadata=resolvedimagesdir:$(DOCS_DIR)/$*/$(DOC_IMAGES_DIR) \
 		--to=typst $(DOCS_DIR)/$*/$*.adoc -o $@
 
-pdf: $(PDF_TARGETS)
+pdf: plantuml $(PDF_TARGETS)
 
 $(BUILD_DIR)/%.pdf: FORCE $(PANDOC_METADATA) styles/filters/asciidoc-to-typst.lua styles/typst/document.typ | $(BUILD_DIR)
 	$(PANDOC) $(COMMON_PANDOC_FLAGS) \
@@ -103,5 +107,6 @@ fonts:
 
 clean:
 	rm -f $(BUILD_DIR)/*.typ $(BUILD_DIR)/*.pdf $(BUILD_DIR)/*.native
+	rm -rf $(PLANTUML_DIR)
 
 FORCE:
