@@ -9,6 +9,7 @@ It currently includes:
 - bundled Source Sans 3 and Source Code Pro fonts
 - custom handling for admonitions, image figures, examples, and section numbering
 - optional PDF/UA-1 and PDF/A-2u output controls through `make`
+- an Adobe-branded template with title page, header/footer, and TOC
 
 ## Layout
 
@@ -18,6 +19,9 @@ It currently includes:
 - `docs/<doc>/assets/images/`: document-local image assets
 - `styles/filters/`: Pandoc Lua filters that normalize AsciiDoc structures for Typst
 - `styles/typst/`: Typst presentation and document styling
+  - `macros.typ`: shared macro definitions (`imagefigure`, `codeexample`, `exampleblock`, `admonition`) included by all templates
+  - `document.typ`: default layout and heading styles
+  - `adobe-whitepaper.typ`: Adobe-branded layout with title page, header/footer, and table of contents
 - `assets/fonts/`: bundled Adobe font files used during Docker builds
 - `build/`: generated Typst and PDF output
 
@@ -28,9 +32,10 @@ make pdf
 make typst
 make fonts
 make DOC=numbered-report pdf
+make TEMPLATE=adobe pdf
 ```
 
-By default, `make pdf` and `make typst` build every document entrypoint under `docs/<doc>/<doc>.adoc`. Use `DOC=...` to build just one.
+By default, `make pdf` and `make typst` build every document entrypoint under `docs/<doc>/<doc>.adoc`. Use `DOC=...` to build just one. Use `TEMPLATE=adobe` to use the Adobe-branded layout; output filenames get an `_adobe` suffix so both sets of PDFs can coexist in `build/`.
 
 Current sample entrypoints:
 
@@ -45,7 +50,8 @@ Current sample entrypoints:
 - `make fonts`: confirm that Typst sees the bundled project fonts
 - `make DOC=numbered-report pdf`: build the numbered validation document
 - `make DOC=white-paper pdf`: build only the white paper
-- `make DOC=annual-report pdf`: build a different document entrypoint
+- `make TEMPLATE=adobe pdf`: build all documents using the Adobe-branded template (output filenames get `_adobe` suffix)
+- `make TEMPLATE=adobe DOC=white-paper pdf`: build one document with the Adobe template
 - `make PDF_STANDARD=ua-1 pdf`: request PDF/UA-1 output
 - `make PDF_STANDARD=a-2u pdf`: request PDF/A-2u output
 - `make PDF_TAGS=off pdf`: disable Tagged PDF output
@@ -70,7 +76,7 @@ The shared Lua filter in `styles/filters/asciidoc-to-typst.lua` is doing more th
 - preserves image alt text for accessibility-aware output
 - rewrites AsciiDoc example blocks into a separate numbered `Example` figure kind
 
-The matching visual presentation lives in `styles/typst/document.typ`.
+The matching macro definitions (`#imagefigure`, `#codeexample`, `#exampleblock`, `#admonition`) live in `styles/typst/macros.typ` and are shared across all templates. Visual presentation (page setup, heading styles, etc.) lives in the active layout template.
 
 ## Figures And Examples
 
@@ -95,6 +101,17 @@ The build can pass Typst PDF conformance options through Docker by setting `PDF_
 - `PDF_TAGS=off` disables Tagged PDF output
 
 Typst currently does not let you target PDF/A and PDF/UA at the same time. Sources: [Typst PDF reference](https://typst.app/docs/reference/pdf/), [Typst accessibility guide](https://typst.app/docs/guides/accessibility/).
+
+## Templates
+
+The `TEMPLATE` variable selects the Typst layout file injected at build time. Both templates share `macros.typ` for filter-emitted macros.
+
+| `TEMPLATE` value | Layout file | Output suffix |
+|---|---|---|
+| *(unset)* | `styles/typst/document.typ` | *(none)* |
+| `adobe` | `styles/typst/adobe-whitepaper.typ` | `_adobe` |
+
+The Adobe template adds a title page, running header/footer, and a table of contents page. It is designed around the Adobe Clean typeface; when that font is not available (it is not bundled in this repository), Typst falls back to Source Sans 3.
 
 ## Notes
 

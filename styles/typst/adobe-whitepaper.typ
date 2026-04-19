@@ -78,7 +78,6 @@
   // Heading styles — per Adobe Brand Guidelines typography hierarchy
   // H1: Adobe Clean Black, tracking -20, leading 90%
   show heading.where(level: 1): it => {
-    pagebreak(weak: true)
     v(0.3cm)
     block(
       below: 0.4cm,
@@ -208,7 +207,7 @@
 
   v(1fr)
   align(center)[
-    #image("Adobe_Wordmark_RGB_Red.svg", height: 1.2cm)
+    #image("assets/images/Adobe_Wordmark_RGB_Red.svg", height: 1.2cm)
   ]
   v(1cm)
 
