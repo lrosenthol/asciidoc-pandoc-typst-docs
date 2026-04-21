@@ -24,3 +24,16 @@ We'd retrieved the leaves, but we'd obviously lost our minds in the process.
 [verse]
 Roses are +++<span style="color: #FF0000">red</span>+++.
 Violets are +++<span style="color: #0000FF">blue</span>+++__-ish__.
+
+
+== Check Dependency Health
+
+Verify the health of your third-party libraries by confirming they have:
+
+* [x] A team of committers
+* [x] Well documented security policies
+* [x] Regular updates and releases
+
+* [ ] Foo
+* [ ] Bar
+* [ ] Foobar

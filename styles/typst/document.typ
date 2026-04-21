@@ -68,6 +68,17 @@
 
 #set table(align: start)
 
+#show "☒": box(
+  width: 0.72em, height: 0.72em,
+  baseline: -0.1em,
+  fill: rgb("#0f2d52"),
+  stroke: none,
+  radius: 2pt,
+)[
+  #set align(center + horizon)
+  #text(fill: white, size: 0.6em, weight: "bold", font: "Source Sans 3")[✓]
+]
+
 #show quote.where(block: true): it => {
   block(
     inset: (left: 16pt, right: 10pt, top: 8pt, bottom: 8pt),
