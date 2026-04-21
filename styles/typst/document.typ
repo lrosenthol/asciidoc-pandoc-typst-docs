@@ -68,6 +68,26 @@
 
 #set table(align: start)
 
+#show quote.where(block: true): it => {
+  block(
+    inset: (left: 16pt, right: 10pt, top: 8pt, bottom: 8pt),
+    stroke: (left: 3pt + rgb("#0f2d52")),
+    fill: luma(248),
+    radius: (right: 3pt),
+    above: 1.5em,
+    below: 1.5em,
+    width: 100%,
+  )[
+    #it.body
+    #if it.attribution != none {
+      v(0.4em, weak: true)
+      align(right)[
+        #text(size: 0.9em, fill: luma(80))[— #it.attribution]
+      ]
+    }
+  ]
+}
+
 #let imagefigure(path, alt, caption) = {
   figure(
     image(path, width: 100%, alt: alt),

@@ -195,6 +195,54 @@ local function transform_figure(el)
   return pandoc.RawBlock("typst", raw)
 end
 
+local function transform_blockquote(el)
+  local content = pandoc.List(el.content)
+  local attribution = nil
+
+  -- Extract attribution: last Para whose first inline is an em dash (U+2014)
+  if #content > 0 then
+    local last = content[#content]
+    if last.t == "Para" and #last.content >= 1 then
+      local first = last.content[1]
+      if first.t == "Str" and first.text == "\u{2014}" then
+        local attr_inlines = pandoc.List()
+        for i = 2, #last.content do
+          attr_inlines:insert(last.content[i])
+        end
+        if #attr_inlines > 0 and attr_inlines[1].t == "Space" then
+          attr_inlines:remove(1)
+        end
+        if #attr_inlines > 0 then
+          attribution = pandoc.utils.stringify(attr_inlines)
+          content:remove(#content)
+        end
+      end
+    end
+  end
+
+  -- Convert CodeBlock children to Para to prevent codeexample wrapping.
+  -- AsciiDoc verse blocks parse indented lines as code blocks (indentation lost).
+  local processed = pandoc.List()
+  for _, block in ipairs(content) do
+    if block.t == "CodeBlock" then
+      local text = block.text:gsub("\n$", "")
+      processed:insert(pandoc.Para(pandoc.List({ pandoc.Str(text) })))
+    else
+      processed:insert(block)
+    end
+  end
+
+  local attr_str = attribution and string.format(", attribution: [%s]", attribution) or ""
+  local blocks = pandoc.List({
+    pandoc.RawBlock("typst", string.format("#quote(block: true%s)[", attr_str)),
+  })
+  for _, block in ipairs(processed) do
+    blocks:insert(block)
+  end
+  blocks:insert(pandoc.RawBlock("typst", "]"))
+  return blocks
+end
+
 local function transform_div(el)
   if #el.content == 2 then
     local first = el.content[1]
@@ -300,6 +348,7 @@ function Pandoc(doc)
   doc = doc:walk({
     Figure = transform_figure,
     Div = transform_div,
+    BlockQuote = transform_blockquote,
   })
 
   return doc:walk({

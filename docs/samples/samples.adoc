@@ -1,0 +1,26 @@
+= Samples
+
+== Dawn on the Plateau
+
+Lazarus was hanging from the bottom limb of a Burdockian tree, licking the bark.
+
+[quote,Mark Tobey]
+On pavements and the bark of trees I have found whole worlds.
+
+"`If there are whole worlds on that bark, he just swallowed them,`" Kizmet replied.
+
+[verse,The documentation attorneys]
+____
+No bark was harmed in the making of this potion.
+    We're not so sure about a couple ants though.
+
+        Nor those worlds...
+
+     Crap, I smell an injunction.
+____
+
+We'd retrieved the leaves, but we'd obviously lost our minds in the process.
+
+[verse]
+Roses are +++<span style="color: #FF0000">red</span>+++.
+Violets are +++<span style="color: #0000FF">blue</span>+++__-ish__.
